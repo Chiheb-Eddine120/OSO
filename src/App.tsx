@@ -11,6 +11,8 @@ import PaymentPage from './pages/PaymentPage';
 import SuccessPage from './pages/SuccessPage';
 import MyOSO from './pages/MyOSO';
 import ContactPage from './pages/ContactPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import './styles/globals.css';
 
 function App() {
@@ -30,6 +32,8 @@ function App() {
               <Route path="/success" element={<SuccessPage />} />
               <Route path="/my-oso" element={<MyOSO />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
             </Routes>
           </main>
         </div>
