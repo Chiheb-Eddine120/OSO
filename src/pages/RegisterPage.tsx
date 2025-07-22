@@ -100,7 +100,7 @@ const RegisterPage: React.FC = () => {
               <option value="">Sélectionner</option>
               <option value="male">Homme</option>
               <option value="female">Femme</option>
-              <option value="other">Autre</option>
+              <option value="other">Ne pas préciser</option>
             </select>
           </div>
         )}

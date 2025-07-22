@@ -13,7 +13,6 @@ const Header: React.FC = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -33,39 +32,36 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className={`header-modern ${isScrolled ? 'scrolled' : ''}`}>
-      <div className="header-content">
+    <header className={`header-modern shadow-lg sticky top-0 z-50 ${isScrolled ? 'scrolled' : ''}`} role="banner">
+      <div className="header-content flex flex-wrap items-center justify-between py-2 px-4 md:px-8">
         {/* Logo */}
-        <Link to="/" className={`header-logo ${isScrolled ? 'scrolled' : ''}`}>
-          <img src={logo} alt="OSO Logo" className="h-8 w-auto" />
-          <span>OSO</span>
+        <Link to="/" className={`header-logo flex items-center gap-2 text-2xl font-extrabold tracking-tight ${isScrolled ? 'scrolled' : ''}`} aria-label="Accueil OSO">
+          <img src={logo} alt="OSO Logo" className="h-10 w-auto drop-shadow" />
+          <span className="gradient-text hidden sm:inline">OSO</span>
         </Link>
-
         {/* Bouton d'action central */}
         <Link 
           to={getCTALink()} 
-          className={`header-cta ${isScrolled ? 'scrolled' : ''}`}
+          className={`header-cta mx-2 ${isScrolled ? 'scrolled' : ''}`}
         >
           <span>{getCTAText()}</span>
           <ArrowRight className="w-4 h-4" />
         </Link>
-
         {/* Contact */}
         <Link 
           to="/contact" 
-          className={`header-nav-link ${isScrolled ? 'scrolled' : ''}`}
+          className={`header-nav-link mx-2 ${isScrolled ? 'scrolled' : ''}`}
         >
           Contact
         </Link>
-
         {/* MyOSO/Connexion */}
         {user ? (
-          <Link to="/my-oso" className={`header-cta ${isScrolled ? 'scrolled' : ''}`}>
+          <Link to="/my-oso" className={`header-cta mx-2 ${isScrolled ? 'scrolled' : ''}`}>
             <User className="w-4 h-4" />
             <span>My OSO</span>
           </Link>
         ) : (
-          <Link to="/login" className={`header-cta ${isScrolled ? 'scrolled' : ''}`}>
+          <Link to="/login" className={`header-cta mx-2 ${isScrolled ? 'scrolled' : ''}`}>
             <User className="w-4 h-4" />
             <span>Connexion</span>
           </Link>
