@@ -32,7 +32,7 @@ export const authService = {
   async signUp(data: SignUpData) {
     try {
       // 1. Créer l'utilisateur dans Supabase Auth
-      const { data: authData, error: authError } = await supabase.auth.signUp({
+      const { error: authError } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
         options: {
