@@ -67,4 +67,14 @@ export interface Availability {
   end_time: string
   is_available: boolean
   created_at: string
+}
+
+export interface Evaluation {
+  id: string;
+  stage_id: string;
+  student_rating?: number;
+  student_feedback?: string;
+  professional_rating?: number;
+  professional_feedback?: string;
+  created_at: string;
 } 

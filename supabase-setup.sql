@@ -1,6 +1,3 @@
--- Configuration de la base de données OSO
--- À exécuter dans l'éditeur SQL de Supabase
-
 -- 1. Table des utilisateurs
 CREATE TABLE IF NOT EXISTS users (
   id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
@@ -106,8 +103,6 @@ $$ language 'plpgsql';
 CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_stages_updated_at BEFORE UPDATE ON stages FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
--- Politiques RLS (Row Level Security)
-
 -- Activer RLS sur toutes les tables
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE students ENABLE ROW LEVEL SECURITY;
@@ -119,33 +114,33 @@ ALTER TABLE evaluations ENABLE ROW LEVEL SECURITY;
 
 -- Politiques pour users
 CREATE POLICY "Users can view their own profile" ON users
-  FOR SELECT USING (auth.uid() = id);
+  FOR SELECT USING ((select auth.uid()) = id);
 
 CREATE POLICY "Users can update their own profile" ON users
-  FOR UPDATE USING (auth.uid() = id);
+  FOR UPDATE USING ((select auth.uid()) = id);
 
 CREATE POLICY "Users can insert their own profile" ON users
-  FOR INSERT WITH CHECK (auth.uid() = id);
+  FOR INSERT WITH CHECK ((select auth.uid()) = id);
 
 -- Politiques pour students
 CREATE POLICY "Students can view their own data" ON students
-  FOR SELECT USING (auth.uid() = user_id);
+  FOR SELECT USING ((select auth.uid()) = user_id);
 
 CREATE POLICY "Students can update their own data" ON students
-  FOR UPDATE USING (auth.uid() = user_id);
+  FOR UPDATE USING ((select auth.uid()) = user_id);
 
 CREATE POLICY "Students can insert their own data" ON students
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
+  FOR INSERT WITH CHECK ((select auth.uid()) = user_id);
 
 -- Politiques pour professionals
 CREATE POLICY "Professionals can view their own data" ON professionals
-  FOR SELECT USING (auth.uid() = user_id);
+  FOR SELECT USING ((select auth.uid()) = user_id);
 
 CREATE POLICY "Professionals can update their own data" ON professionals
-  FOR UPDATE USING (auth.uid() = user_id);
+  FOR UPDATE USING ((select auth.uid()) = user_id);
 
 CREATE POLICY "Professionals can insert their own data" ON professionals
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
+  FOR INSERT WITH CHECK ((select auth.uid()) = user_id);
 
 -- Politiques pour jobs (lecture publique, écriture par le professionnel)
 CREATE POLICY "Anyone can view jobs" ON jobs
@@ -156,7 +151,7 @@ CREATE POLICY "Professionals can manage their own jobs" ON jobs
     EXISTS (
       SELECT 1 FROM professionals 
       WHERE professionals.id = jobs.professional_id 
-      AND professionals.user_id = auth.uid()
+      AND professionals.user_id = (select auth.uid())
     )
   );
 
@@ -166,7 +161,7 @@ CREATE POLICY "Students can view their own stages" ON stages
     EXISTS (
       SELECT 1 FROM students 
       WHERE students.id = stages.student_id 
-      AND students.user_id = auth.uid()
+      AND students.user_id = (select auth.uid())
     )
   );
 
@@ -175,7 +170,7 @@ CREATE POLICY "Students can insert their own stages" ON stages
     EXISTS (
       SELECT 1 FROM students 
       WHERE students.id = stages.student_id 
-      AND students.user_id = auth.uid()
+      AND students.user_id = (select auth.uid())
     )
   );
 
@@ -184,7 +179,7 @@ CREATE POLICY "Students can update their own stages" ON stages
     EXISTS (
       SELECT 1 FROM students 
       WHERE students.id = stages.student_id 
-      AND students.user_id = auth.uid()
+      AND students.user_id = (select auth.uid())
     )
   );
 
@@ -194,7 +189,7 @@ CREATE POLICY "Professionals can manage their own availabilities" ON availabilit
     EXISTS (
       SELECT 1 FROM professionals 
       WHERE professionals.id = availabilities.professional_id 
-      AND professionals.user_id = auth.uid()
+      AND professionals.user_id = (select auth.uid())
     )
   );
 
@@ -205,34 +200,6 @@ CREATE POLICY "Users can view evaluations for their stages" ON evaluations
       SELECT 1 FROM stages s
       JOIN students st ON s.student_id = st.id
       WHERE s.id = evaluations.stage_id 
-      AND st.user_id = auth.uid()
-    )
-    OR
-    EXISTS (
-      SELECT 1 FROM stages s
-      JOIN professionals p ON s.professional_id = p.id
-      WHERE s.id = evaluations.stage_id 
-      AND p.user_id = auth.uid()
+      AND st.user_id = (select auth.uid())
     )
   );
-
--- Fonction pour créer automatiquement un profil utilisateur après inscription
-CREATE OR REPLACE FUNCTION handle_new_user()
-RETURNS TRIGGER AS $$
-BEGIN
-  INSERT INTO users (id, email, first_name, last_name, user_type)
-  VALUES (
-    NEW.id,
-    NEW.email,
-    NEW.raw_user_meta_data->>'first_name',
-    NEW.raw_user_meta_data->>'last_name',
-    NEW.raw_user_meta_data->>'user_type'
-  );
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- Trigger pour créer automatiquement le profil utilisateur
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION handle_new_user(); 
