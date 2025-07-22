@@ -1,53 +1,51 @@
 import React, { useState } from 'react';
 import { User, Calendar, Settings, LogOut, Edit, Eye, EyeOff } from 'lucide-react';
-
-interface UserProfile {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  address: string;
-  city: string;
-  userType: 'student' | 'professional';
-}
+import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
 
 const MyOSO: React.FC = () => {
+  const { user, signOut, updateUser } = useAuth();
   const [activeTab, setActiveTab] = useState<'profile' | 'bookings' | 'settings'>('profile');
   const [isEditing, setIsEditing] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  
-  // Données simulées de l'utilisateur
-  const [userProfile, setUserProfile] = useState<UserProfile>({
-    firstName: 'Jean',
-    lastName: 'Dupont',
-    email: 'jean.dupont@email.com',
-    phone: '+32 470 123 456',
-    address: 'Rue de la Paix 123',
-    city: 'Bruxelles (1000)',
-    userType: 'student'
-  });
+  const [profile, setProfile] = useState<any>(user);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const [bookings] = useState([
-    {
-      id: '1',
-      date: '2024-02-15',
-      duration: 3,
-      period: 'Vacances d\'hiver',
-      location: 'Bruxelles',
-      status: 'confirmed',
-      jobs: ['Médecin', 'Avocat', 'Ingénieur']
+  React.useEffect(() => {
+    setProfile(user);
+  }, [user]);
+
+  const handleSaveProfile = async () => {
+    setSaving(true);
+    setError(null);
+    try {
+      const updates = {
+        first_name: profile.first_name,
+        last_name: profile.last_name,
+        email: profile.email,
+        phone: profile.phone,
+        address: profile.address,
+        postal_code: profile.postal_code,
+        city: profile.city,
+      };
+      const { error } = await supabase
+        .from('users')
+        .update(updates)
+        .eq('id', user?.id);
+      if (error) throw error;
+      updateUser(updates);
+      setIsEditing(false);
+    } catch (e: any) {
+      setError(e.message || 'Erreur lors de la sauvegarde');
+    } finally {
+      setSaving(false);
     }
-  ]);
-
-  const handleSaveProfile = () => {
-    // Ici, vous intégreriez l'appel à Supabase pour sauvegarder les modifications
-    console.log('Profil sauvegardé:', userProfile);
-    setIsEditing(false);
   };
 
-  const handleLogout = () => {
-    // Ici, vous intégreriez la logique de déconnexion
-    console.log('Déconnexion');
+  const handleLogout = async () => {
+    await signOut();
+    window.location.href = '/login';
   };
 
   return (
@@ -56,7 +54,7 @@ const MyOSO: React.FC = () => {
         <div className="max-w-4xl mx-auto">
           {/* En-tête */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">Mon espace OSO</h1>
+            <h1 className="text-3xl font-extrabold mb-2 gradient-text">Mon espace OSO</h1>
             <p className="text-gray-600">
               Gérez votre profil et vos réservations
             </p>
@@ -68,7 +66,7 @@ const MyOSO: React.FC = () => {
               onClick={() => setActiveTab('profile')}
               className={`px-6 py-3 font-medium border-b-2 transition-colors ${
                 activeTab === 'profile'
-                  ? 'border-pink-600 text-pink-600'
+                  ? 'border-oso-pink text-oso-pink'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
@@ -79,7 +77,7 @@ const MyOSO: React.FC = () => {
               onClick={() => setActiveTab('bookings')}
               className={`px-6 py-3 font-medium border-b-2 transition-colors ${
                 activeTab === 'bookings'
-                  ? 'border-pink-600 text-pink-600'
+                  ? 'border-oso-pink text-oso-pink'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
@@ -90,7 +88,7 @@ const MyOSO: React.FC = () => {
               onClick={() => setActiveTab('settings')}
               className={`px-6 py-3 font-medium border-b-2 transition-colors ${
                 activeTab === 'settings'
-                  ? 'border-pink-600 text-pink-600'
+                  ? 'border-oso-pink text-oso-pink'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
@@ -112,75 +110,79 @@ const MyOSO: React.FC = () => {
                   {isEditing ? 'Annuler' : 'Modifier'}
                 </button>
               </div>
-
+              {error && <div className="error-message mb-4">{error}</div>}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="form-group">
                   <label className="form-label">Prénom</label>
                   <input
                     type="text"
-                    value={userProfile.firstName}
-                    onChange={(e) => setUserProfile(prev => ({ ...prev, firstName: e.target.value }))}
+                    value={profile?.first_name || ''}
+                    onChange={(e) => setProfile((prev: any) => ({ ...prev, first_name: e.target.value }))}
                     disabled={!isEditing}
                     className="form-input"
                   />
                 </div>
-
                 <div className="form-group">
                   <label className="form-label">Nom</label>
                   <input
                     type="text"
-                    value={userProfile.lastName}
-                    onChange={(e) => setUserProfile(prev => ({ ...prev, lastName: e.target.value }))}
+                    value={profile?.last_name || ''}
+                    onChange={(e) => setProfile((prev: any) => ({ ...prev, last_name: e.target.value }))}
                     disabled={!isEditing}
                     className="form-input"
                   />
                 </div>
-
                 <div className="form-group">
                   <label className="form-label">Email</label>
                   <input
                     type="email"
-                    value={userProfile.email}
-                    onChange={(e) => setUserProfile(prev => ({ ...prev, email: e.target.value }))}
+                    value={profile?.email || ''}
+                    onChange={(e) => setProfile((prev: any) => ({ ...prev, email: e.target.value }))}
                     disabled={!isEditing}
                     className="form-input"
                   />
                 </div>
-
                 <div className="form-group">
                   <label className="form-label">Téléphone</label>
                   <input
                     type="tel"
-                    value={userProfile.phone}
-                    onChange={(e) => setUserProfile(prev => ({ ...prev, phone: e.target.value }))}
+                    value={profile?.phone || ''}
+                    onChange={(e) => setProfile((prev: any) => ({ ...prev, phone: e.target.value }))}
                     disabled={!isEditing}
                     className="form-input"
                   />
                 </div>
-
                 <div className="form-group md:col-span-2">
                   <label className="form-label">Adresse</label>
                   <input
                     type="text"
-                    value={userProfile.address}
-                    onChange={(e) => setUserProfile(prev => ({ ...prev, address: e.target.value }))}
+                    value={profile?.address || ''}
+                    onChange={(e) => setProfile((prev: any) => ({ ...prev, address: e.target.value }))}
                     disabled={!isEditing}
                     className="form-input"
                   />
                 </div>
-
+                <div className="form-group md:col-span-2">
+                  <label className="form-label">Code postal</label>
+                  <input
+                    type="text"
+                    value={profile?.postal_code || ''}
+                    onChange={(e) => setProfile((prev: any) => ({ ...prev, postal_code: e.target.value }))}
+                    disabled={!isEditing}
+                    className="form-input"
+                  />
+                </div>
                 <div className="form-group md:col-span-2">
                   <label className="form-label">Ville</label>
                   <input
                     type="text"
-                    value={userProfile.city}
-                    onChange={(e) => setUserProfile(prev => ({ ...prev, city: e.target.value }))}
+                    value={profile?.city || ''}
+                    onChange={(e) => setProfile((prev: any) => ({ ...prev, city: e.target.value }))}
                     disabled={!isEditing}
                     className="form-input"
                   />
                 </div>
               </div>
-
               {isEditing && (
                 <div className="mt-6 flex justify-end space-x-4">
                   <button
@@ -192,77 +194,34 @@ const MyOSO: React.FC = () => {
                   <button
                     onClick={handleSaveProfile}
                     className="btn-primary"
+                    disabled={saving}
                   >
-                    Sauvegarder
+                    {saving ? 'Sauvegarde...' : 'Sauvegarder'}
                   </button>
                 </div>
               )}
             </div>
           )}
 
+          {/* Les autres onglets restent inchangés pour l'instant */}
           {activeTab === 'bookings' && (
             <div className="space-y-6">
-              {bookings.map((booking) => (
-                <div key={booking.id} className="card">
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <h3 className="text-lg font-semibold">
-                        Stage du {new Date(booking.date).toLocaleDateString('fr-FR')}
-                      </h3>
-                      <p className="text-gray-600">
-                        {booking.duration} jour{booking.duration > 1 ? 's' : ''} - {booking.period}
-                      </p>
-                    </div>
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      booking.status === 'confirmed' 
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {booking.status === 'confirmed' ? 'Confirmé' : 'En attente'}
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <span className="text-sm font-medium text-gray-600">Localisation:</span>
-                      <p className="text-gray-900">{booking.location}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-medium text-gray-600">Métiers:</span>
-                      <p className="text-gray-900">{booking.jobs.join(', ')}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex space-x-4">
-                    <button className="btn-secondary text-sm">
-                      Voir les détails
-                    </button>
-                    <button className="btn-secondary text-sm">
-                      Contacter le support
-                    </button>
-                  </div>
-                </div>
-              ))}
-
-              {bookings.length === 0 && (
-                <div className="card text-center py-12">
-                  <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">Aucune réservation</h3>
-                  <p className="text-gray-600 mb-4">
-                    Vous n'avez pas encore de réservation de stage.
-                  </p>
-                  <button className="btn-primary">
-                    Réserver un stage
-                  </button>
-                </div>
-              )}
+              <div className="card text-center py-12">
+                <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Aucune réservation</h3>
+                <p className="text-gray-600 mb-4">
+                  Vous n'avez pas encore de réservation de stage.
+                </p>
+                <button className="btn-primary">
+                  Réserver un stage
+                </button>
+              </div>
             </div>
           )}
 
           {activeTab === 'settings' && (
             <div className="card">
               <h2 className="text-xl font-semibold mb-6">Paramètres du compte</h2>
-
               <div className="space-y-6">
                 <div>
                   <h3 className="text-lg font-medium mb-4">Changer le mot de passe</h3>
@@ -284,7 +243,6 @@ const MyOSO: React.FC = () => {
                         </button>
                       </div>
                     </div>
-
                     <div className="form-group">
                       <label className="form-label">Confirmer le mot de passe</label>
                       <input
@@ -298,7 +256,6 @@ const MyOSO: React.FC = () => {
                     Changer le mot de passe
                   </button>
                 </div>
-
                 <div className="border-t pt-6">
                   <h3 className="text-lg font-medium mb-4">Notifications</h3>
                   <div className="space-y-3">
@@ -316,7 +273,6 @@ const MyOSO: React.FC = () => {
                     </label>
                   </div>
                 </div>
-
                 <div className="border-t pt-6">
                   <h3 className="text-lg font-medium mb-4 text-red-600">Zone dangereuse</h3>
                   <button
