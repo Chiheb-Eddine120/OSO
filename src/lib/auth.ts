@@ -42,15 +42,26 @@ export const authService = {
             user_type: data.user_type
           }
         }
-      })
+      });
+      if (authError) throw authError;
 
-      if (authError) throw authError
+      // 2. Connexion immédiate pour activer la session (RLS)
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password
+      });
+      if (signInError) throw signInError;
 
-      // 2. Créer le profil utilisateur dans la table users
+      // 3. Récupérer l'utilisateur connecté
+      const { data: userSession } = await supabase.auth.getUser();
+      const userId = userSession.user?.id;
+      if (!userId) throw new Error('Impossible de récupérer l’ID utilisateur après connexion.');
+
+      // 4. Créer le profil utilisateur dans la table users
       const { error: userError } = await supabase
         .from('users')
         .insert({
-          id: authData.user?.id,
+          id: userId,
           email: data.email,
           first_name: data.first_name,
           last_name: data.last_name,
@@ -59,37 +70,36 @@ export const authService = {
           postal_code: data.postal_code,
           city: data.city,
           user_type: data.user_type
-        })
+        });
+      if (userError) throw userError;
 
-      if (userError) throw userError
-
-      // 3. Créer le profil spécifique (student ou professional)
+      // 5. Créer le profil spécifique (student ou professional)
       if (data.user_type === 'student') {
         const { error: studentError } = await supabase
           .from('students')
           .insert({
-            user_id: authData.user?.id,
+            user_id: userId,
             gender: data.gender
-          })
-        if (studentError) throw studentError
+          });
+        if (studentError) throw studentError;
       } else {
         const { error: professionalError } = await supabase
           .from('professionals')
           .insert({
-            user_id: authData.user?.id,
+            user_id: userId,
             job_title: data.job_title,
             company_name: data.company_name,
             job_description: data.job_description,
             academic_background: data.academic_background,
             motivation_text: data.motivation_text
-          })
-        if (professionalError) throw professionalError
+          });
+        if (professionalError) throw professionalError;
       }
 
-      return { success: true, user: authData.user }
+      return { success: true, user: userSession.user };
     } catch (error) {
-      console.error('Erreur lors de l\'inscription:', error)
-      throw error
+      console.error('Erreur lors de l\'inscription:', error);
+      throw error;
     }
   },
 
