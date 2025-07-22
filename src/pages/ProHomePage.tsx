@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Users, Star, Award, MessageCircle, ArrowRight, Target, Sparkles } from 'lucide-react';
+import { Heart, Users, Star, Award, Target, Sparkles } from 'lucide-react';
 
 const ProHomePage: React.FC = () => {
   return (

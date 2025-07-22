@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import logo from '../assets/logos/logo.png';
 
 const Header: React.FC = () => {
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
 

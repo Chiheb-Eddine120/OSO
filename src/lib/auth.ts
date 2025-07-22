@@ -1,5 +1,4 @@
 import { supabase } from './supabase'
-import { User } from './supabase'
 
 export interface AuthUser {
   id: string
