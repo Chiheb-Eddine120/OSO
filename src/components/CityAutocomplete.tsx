@@ -51,40 +51,39 @@ const CityAutocomplete: React.FC<CityAutocompleteProps> = ({
     return city.province.french || city.province.dutch || '';
   };
 
-  // Recherche des suggestions
-  const searchCities = (query: string) => {
-    if (query.length < 2) {
-      setSuggestions([]);
-      return;
-    }
-
-    const normalizedQuery = normalizeText(query);
-    const results: CitySearchResult[] = [];
-
-    citiesData.forEach((city: City) => {
-      const cityName = getCityName(city);
-      const regionName = getRegionName(city);
-      const provinceName = getProvinceName(city);
-
-      if (normalizeText(cityName).includes(normalizedQuery) ||
-          normalizeText(regionName).includes(normalizedQuery) ||
-          normalizeText(provinceName).includes(normalizedQuery)) {
-        
-        results.push({
-          post_code: city.post_code,
-          city_name: cityName,
-          region: regionName,
-          province: provinceName
-        });
-      }
-    });
-
-    // Limiter à 10 résultats et trier par pertinence
-    setSuggestions(results.slice(0, 10));
-  };
-
   // Gestion des changements de valeur
   useEffect(() => {
+    const searchCities = (query: string) => {
+      if (query.length < 2) {
+        setSuggestions([]);
+        return;
+      }
+
+      const normalizedQuery = normalizeText(query);
+      const results: CitySearchResult[] = [];
+
+      citiesData.forEach((city: City) => {
+        const cityName = getCityName(city);
+        const regionName = getRegionName(city);
+        const provinceName = getProvinceName(city);
+
+        if (normalizeText(cityName).includes(normalizedQuery) ||
+            normalizeText(regionName).includes(normalizedQuery) ||
+            normalizeText(provinceName).includes(normalizedQuery)) {
+          
+          results.push({
+            post_code: city.post_code,
+            city_name: cityName,
+            region: regionName,
+            province: provinceName
+          });
+        }
+      });
+
+      // Limiter à 10 résultats et trier par pertinence
+      setSuggestions(results.slice(0, 10));
+    };
+
     searchCities(value);
   }, [value]);
 

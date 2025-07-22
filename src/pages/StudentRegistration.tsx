@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { Eye, EyeOff, User, Mail, Phone, MapPin, Lock } from 'lucide-react';
+import { Eye, EyeOff, User, Mail, MapPin, Lock } from 'lucide-react';
 import CityAutocomplete from '../components/CityAutocomplete';
 import { CitySearchResult } from '../types/cities';
 
@@ -147,7 +147,7 @@ const StudentRegistration: React.FC = () => {
                     {...register('phone', {
                       required: 'Le numéro de téléphone est requis',
                       pattern: {
-                        value: /^[\+]?[0-9\s\-\(\)]{9,}$/,
+                        value: /^[+]?[-0-9\s()]{9,}$/,
                         message: 'Numéro de téléphone invalide'
                       }
                     })}

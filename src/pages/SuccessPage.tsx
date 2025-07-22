@@ -4,8 +4,6 @@ import { CheckCircle, Home, Calendar, Users, Lightbulb, Heart } from 'lucide-rea
 
 const SuccessPage: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const bookingData = location.state?.bookingData;
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">

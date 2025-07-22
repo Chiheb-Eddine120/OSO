@@ -78,7 +78,7 @@ const PaymentPage: React.FC = () => {
     // Prix de base + prix par métier sélectionné
     const basePrice = 50;
     const pricePerJob = 25;
-    const totalJobs = bookingData?.selectedJobs?.length || 0;
+    const totalJobs = ((bookingData && bookingData.selectedJobs) && bookingData.selectedJobs.length) || 0;
     return basePrice + (pricePerJob * totalJobs);
   };
 
