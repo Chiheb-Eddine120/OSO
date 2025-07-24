@@ -22,13 +22,13 @@ const SuccessPage: React.FC = () => {
             </h1>
             
             <p className="text-lg text-gray-600 mb-6">
-              Nous t'enverrons une confirmation et ta feuille de route (fiches pros, adresses, horaires) 
-              dans max 5 jours ouvrables !
+              Nous t’enverrons une confirmation et ta feuille de route (fiches pros, adresses, horaires) dans max XX jours ouvrables !
             </p>
 
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
               <p className="text-blue-800 font-medium">
-                En attendant, commence à te préparer pour ton stage !
+                En attendant, commence à te préparer pour ton stage !<br />
+                <span className="block mt-2 text-sm text-blue-700">Présente-toi (envoyé au pro) · Questions à poser · Attitude pro · Expérience valorisante · À l’écoute de soi</span>
               </p>
             </div>
           </div>
@@ -41,13 +41,12 @@ const SuccessPage: React.FC = () => {
               <div className="text-left">
                 <h3 className="text-lg font-semibold mb-3 flex items-center">
                   <Users className="w-5 h-5 mr-2 text-pink-600" />
-                  Présente-toi
+                  Présente-toi (envoyé au pro)
                 </h3>
                 <ul className="text-gray-600 space-y-2 text-sm">
-                  <li>• Sois ponctuel et professionnel</li>
-                  <li>• Habille-toi de manière appropriée</li>
-                  <li>• Prépare une courte présentation</li>
-                  <li>• Apporte un carnet pour prendre des notes</li>
+                  <li>• Prépare une courte présentation de toi</li>
+                  <li>• Explique pourquoi tu fais ce stage</li>
+                  <li>• Sois poli et souriant</li>
                 </ul>
               </div>
 
@@ -58,22 +57,21 @@ const SuccessPage: React.FC = () => {
                 </h3>
                 <ul className="text-gray-600 space-y-2 text-sm">
                   <li>• Quel est le parcours pour ce métier ?</li>
-                  <li>• Quelles sont les qualités requises ?</li>
-                  <li>• Quels sont les avantages et inconvénients ?</li>
-                  <li>• Quelles sont les évolutions possibles ?</li>
+                  <li>• Qu’est-ce qui te plaît le plus dans ce métier ?</li>
+                  <li>• Quelles sont les difficultés ?</li>
+                  <li>• Quels conseils donnerais-tu à un jeune ?</li>
                 </ul>
               </div>
 
               <div className="text-left">
                 <h3 className="text-lg font-semibold mb-3 flex items-center">
                   <Heart className="w-5 h-5 mr-2 text-pink-600" />
-                  Attitude professionnelle
+                  Attitude pro
                 </h3>
                 <ul className="text-gray-600 space-y-2 text-sm">
-                  <li>• Sois curieux et intéressé</li>
-                  <li>• Pose des questions pertinentes</li>
-                  <li>• Respecte les règles de l'entreprise</li>
-                  <li>• Remercie pour l'opportunité</li>
+                  <li>• Sois ponctuel et respectueux</li>
+                  <li>• Observe et écoute attentivement</li>
+                  <li>• Remercie à la fin de chaque journée</li>
                 </ul>
               </div>
 
@@ -83,21 +81,19 @@ const SuccessPage: React.FC = () => {
                   Expérience valorisante
                 </h3>
                 <ul className="text-gray-600 space-y-2 text-sm">
-                  <li>• Documente ton expérience</li>
-                  <li>• Prends des photos (si autorisé)</li>
-                  <li>• Rédige un compte-rendu</li>
-                  <li>• Ajoute cette expérience à ton CV</li>
+                  <li>• Note ce que tu as appris</li>
+                  <li>• Garde des souvenirs (photos, carnet, etc.)</li>
+                  <li>• Pense à valoriser ce stage dans ton CV</li>
                 </ul>
               </div>
             </div>
 
             <div className="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
               <h3 className="font-semibold text-yellow-800 mb-2">
-                À l'écoute de soi
+                À l’écoute de soi
               </h3>
               <p className="text-yellow-700 text-sm">
-                Pendant ton stage, sois attentif à tes ressentis : est-ce que ce métier te plaît ? 
-                Te vois-tu exercer cette profession ? Ces réflexions t'aideront à clarifier ton projet professionnel.
+                Pendant ton stage, sois attentif à tes ressentis : est-ce que ce métier te plaît ? Te vois-tu exercer cette profession ? Ces réflexions t’aideront à clarifier ton projet professionnel.
               </p>
             </div>
           </div>

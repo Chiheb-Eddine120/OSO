@@ -15,6 +15,7 @@ interface StageBookingData {
 const StageBooking: React.FC = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
+  const totalSteps = 6;
   const [bookingData, setBookingData] = useState<StageBookingData>({
     duration: 0,
     period: '',
@@ -58,11 +59,13 @@ const StageBooking: React.FC = () => {
   };
 
   const handleNext = () => {
-    if (currentStep < 4) {
+    // Validation par étape
+    if (currentStep === 1 && bookingData.duration === 0) return;
+    if (currentStep === 2 && !bookingData.period) return;
+    if (currentStep === 3 && !bookingData.location) return;
+    if (currentStep === 4 && !bookingData.maxDistance) return;
+    if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
-    } else {
-      // Étape finale - afficher le résumé
-      setCurrentStep(5);
     }
   };
 
@@ -100,7 +103,7 @@ const StageBooking: React.FC = () => {
           {/* Progress Bar */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
-              {[1, 2, 3, 4].map((step) => (
+              {[1, 2, 3, 4, 5, 6].map((step) => (
                 <div key={step} className="flex items-center">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
                     step <= currentStep 
@@ -109,7 +112,7 @@ const StageBooking: React.FC = () => {
                   }`}>
                     {step}
                   </div>
-                  {step < 4 && (
+                  {step < 6 && (
                     <div className={`w-16 h-1 mx-2 ${
                       step < currentStep ? 'bg-pink-600' : 'bg-gray-200'
                     }`} />
@@ -118,7 +121,7 @@ const StageBooking: React.FC = () => {
               ))}
             </div>
             <div className="text-center text-sm text-gray-600">
-              Étape {currentStep} sur 4
+              Étape {currentStep} sur 6
             </div>
           </div>
 
@@ -131,22 +134,20 @@ const StageBooking: React.FC = () => {
                   Durée du stage
                 </h2>
                 <p className="text-gray-600 mb-6">
-                  Combien de jours souhaitez-vous consacrer à votre stage d'orientation ?
+                  Choisis la durée de ton stage d'orientation.
                 </p>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {[1, 2, 3, 4, 5].map((days) => (
-                    <button
-                      key={days}
-                      onClick={() => {
-                        setBookingData(prev => ({ ...prev, duration: days }));
-                        handleNext();
-                      }}
-                      className="p-4 border-2 border-gray-200 rounded-lg hover:border-pink-600 hover:bg-pink-50 transition-colors"
-                    >
-                      <div className="text-2xl font-bold text-gray-900">{days}</div>
-                      <div className="text-sm text-gray-600">jour{days > 1 ? 's' : ''}</div>
-                    </button>
-                  ))}
+                <div className="form-group max-w-xs mx-auto">
+                  <label className="form-label">Durée</label>
+                  <select
+                    className="form-input w-full"
+                    value={bookingData.duration || ''}
+                    onChange={e => setBookingData(prev => ({ ...prev, duration: Number(e.target.value) }))}
+                  >
+                    <option value="">Sélectionne une durée</option>
+                    <option value={3}>3 jours</option>
+                    <option value={5}>5 jours</option>
+                    <option value={10}>10 jours</option>
+                  </select>
                 </div>
               </div>
             )}
@@ -164,11 +165,12 @@ const StageBooking: React.FC = () => {
                   {periods.map((period) => (
                     <button
                       key={period.id}
-                      onClick={() => {
-                        setBookingData(prev => ({ ...prev, period: period.id }));
-                        handleNext();
-                      }}
-                      className="p-4 border-2 border-gray-200 rounded-lg hover:border-pink-600 hover:bg-pink-50 transition-colors text-left"
+                      onClick={() => setBookingData(prev => ({ ...prev, period: period.id }))}
+                      className={`p-4 border-2 rounded-lg transition-colors text-left ${
+                        bookingData.period === period.id
+                          ? 'border-pink-600 bg-pink-50'
+                          : 'border-gray-200 hover:border-pink-600 hover:bg-pink-50'
+                      }`}
                     >
                       <div className="font-semibold text-gray-900">{period.label}</div>
                       <div className="text-sm text-gray-600">{period.dates}</div>
@@ -222,11 +224,12 @@ const StageBooking: React.FC = () => {
                   {distances.map((distance) => (
                     <button
                       key={distance}
-                      onClick={() => {
-                        setBookingData(prev => ({ ...prev, maxDistance: distance }));
-                        handleNext();
-                      }}
-                      className="p-4 border-2 border-gray-200 rounded-lg hover:border-pink-600 hover:bg-pink-50 transition-colors"
+                      onClick={() => setBookingData(prev => ({ ...prev, maxDistance: distance }))}
+                      className={`p-4 border-2 rounded-lg transition-colors ${
+                        bookingData.maxDistance === distance
+                          ? 'border-pink-600 bg-pink-50'
+                          : 'border-gray-200 hover:border-pink-600 hover:bg-pink-50'
+                      }`}
                     >
                       <div className="text-xl font-bold text-gray-900">{distance}</div>
                       <div className="text-sm text-gray-600">km</div>
@@ -275,66 +278,82 @@ const StageBooking: React.FC = () => {
               </div>
             )}
 
-            {/* Navigation Buttons */}
-            <div className="flex justify-between mt-8">
-              {currentStep > 1 && currentStep < 5 && (
-                <button
-                  onClick={handleBack}
-                  className="btn-secondary"
-                >
-                  Retour
-                </button>
-              )}
-              {currentStep < 4 && (
-                <button
-                  onClick={handleNext}
-                  className="btn-primary ml-auto"
-                >
-                  Suivant
-                </button>
-              )}
-              {currentStep === 4 && (
-                <button
-                  onClick={handleNext}
-                  disabled={bookingData.location === ''}
-                  className="btn-primary ml-auto disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Voir les métiers disponibles
-                </button>
-              )}
-              {currentStep === 5 && (
+            {currentStep === 6 && (
+              <div>
+                <h2 className="text-2xl font-bold mb-6 flex items-center">
+                  <CheckCircle className="w-6 h-6 mr-2 text-green-600" />
+                  Résumé de ta demande
+                </h2>
+                <div className="mb-4">
+                  <div className="mb-2"><span className="font-semibold">Durée :</span> {bookingData.duration} jour{bookingData.duration > 1 ? 's' : ''}</div>
+                  <div className="mb-2"><span className="font-semibold">Période :</span> {periods.find(p => p.id === bookingData.period)?.label || '-'}</div>
+                  <div className="mb-2"><span className="font-semibold">Ville :</span> {bookingData.location}</div>
+                  <div className="mb-2"><span className="font-semibold">Rayon :</span> {bookingData.maxDistance} km</div>
+                  <div className="mb-2"><span className="font-semibold">Métiers choisis :</span> {availableJobs.filter(j => bookingData.selectedJobs.includes(j.id)).map(j => j.title).join(', ')}</div>
+                </div>
+                <div className="card bg-yellow-50 border border-yellow-200 mb-4">
+                  <div className="flex items-start">
+                    <AlertCircle className="w-6 h-6 text-yellow-600 mr-3 mt-1" />
+                    <div>
+                      <h3 className="font-semibold text-yellow-800 mb-2">
+                        Ta demande est non modifiable : sois sûr.e de ton choix !
+                      </h3>
+                      <p className="text-yellow-700 text-sm">
+                        Attention : l'ordre des métiers affiché ne correspond pas à l'ordre réel pendant le stage. 
+                        Celui-ci te sera communiqué au plus tard deux semaines avant le départ.
+                      </p>
+                      <p className="text-yellow-700 text-sm mt-2">
+                        En cas d'indisponibilité ou d'un autre imprévu concernant l'un des métiers, 
+                        une notification te sera envoyée afin que tu puisses en choisir un autre.
+                      </p>
+                    </div>
+                  </div>
+                </div>
                 <button
                   onClick={handleConfirm}
                   disabled={bookingData.selectedJobs.length === 0}
-                  className="btn-primary ml-auto disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Confirmer ma sélection
                 </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
-          {/* Résumé et avertissement */}
-          {currentStep === 5 && (
-            <div className="mt-8 card bg-yellow-50 border border-yellow-200">
-              <div className="flex items-start">
-                <AlertCircle className="w-6 h-6 text-yellow-600 mr-3 mt-1" />
-                <div>
-                  <h3 className="font-semibold text-yellow-800 mb-2">
-                    Ta demande est non modifiable : sois sûr.e de ton choix !
-                  </h3>
-                  <p className="text-yellow-700 text-sm">
-                    Attention : l'ordre des métiers affiché ne correspond pas à l'ordre réel pendant le stage. 
-                    Celui-ci te sera communiqué au plus tard deux semaines avant le départ.
-                  </p>
-                  <p className="text-yellow-700 text-sm mt-2">
-                    En cas d'indisponibilité ou d'un autre imprévu concernant l'un des métiers, 
-                    une notification te sera envoyée afin que tu puisses en choisir un autre.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Navigation Buttons */}
+          <div className="flex justify-between mt-8">
+            {currentStep > 1 && (
+              <button
+                onClick={handleBack}
+                className="btn-secondary"
+              >
+                Retour
+              </button>
+            )}
+            {currentStep < totalSteps && (
+              <button
+                onClick={handleNext}
+                className={`btn-primary ml-auto ${
+                  (currentStep === 1 && bookingData.duration === 0) ||
+                  (currentStep === 2 && !bookingData.period) ||
+                  (currentStep === 3 && !bookingData.location) ||
+                  (currentStep === 4 && !bookingData.maxDistance) ||
+                  (currentStep === 5 && bookingData.selectedJobs.length === 0)
+                    ? 'opacity-50 cursor-not-allowed'
+                    : ''
+                }`}
+                disabled={
+                  (currentStep === 1 && bookingData.duration === 0) ||
+                  (currentStep === 2 && !bookingData.period) ||
+                  (currentStep === 3 && !bookingData.location) ||
+                  (currentStep === 4 && !bookingData.maxDistance) ||
+                  (currentStep === 5 && bookingData.selectedJobs.length === 0)
+                }
+              >
+                Suivant
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

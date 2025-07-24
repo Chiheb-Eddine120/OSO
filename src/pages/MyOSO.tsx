@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { User, Calendar, Settings, LogOut, Edit, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
+import { useNavigate } from 'react-router-dom';
+import Modal from '../components/Modal';
 
 const MyOSO: React.FC = () => {
   const { user, signOut, updateUser } = useAuth();
@@ -11,6 +13,8 @@ const MyOSO: React.FC = () => {
   const [profile, setProfile] = useState<any>(user);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const [modalOpen, setModalOpen] = React.useState(false);
 
   React.useEffect(() => {
     setProfile(user);
@@ -46,6 +50,15 @@ const MyOSO: React.FC = () => {
   const handleLogout = async () => {
     await signOut();
     window.location.href = '/login';
+  };
+
+  const handleReserveClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!user) {
+      setModalOpen(true);
+    } else {
+      navigate('/book-stage');
+    }
   };
 
   return (
@@ -212,9 +225,35 @@ const MyOSO: React.FC = () => {
                 <p className="text-gray-600 mb-4">
                   Vous n'avez pas encore de réservation de stage.
                 </p>
-                <button className="btn-primary">
+                <button className="btn-primary" onClick={handleReserveClick}>
                   Réserver un stage
                 </button>
+                <Modal
+                  isOpen={modalOpen}
+                  onClose={() => setModalOpen(false)}
+                  title="Connecte-toi ou crée un compte"
+                  actions={
+                    <>
+                      <button
+                        className="btn-primary"
+                        onClick={() => { setModalOpen(false); navigate('/login'); }}
+                      >
+                        Se connecter
+                      </button>
+                      <button
+                        className="btn-secondary"
+                        onClick={() => { setModalOpen(false); navigate('/register/student'); }}
+                      >
+                        Créer un compte
+                      </button>
+                    </>
+                  }
+                >
+                  <p className="text-gray-700 text-center">
+                    Pour réserver un stage, tu dois être connecté.<br />
+                    Merci de te connecter ou de créer un compte pour poursuivre.
+                  </p>
+                </Modal>
               </div>
             </div>
           )}

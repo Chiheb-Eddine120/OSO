@@ -1,8 +1,23 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Users, Award, MessageCircle, Target, Heart } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
+import Modal from '../components/Modal';
 
 const HomePage: React.FC = () => {
+  const { user } = useAuth();
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const navigate = useNavigate();
+
+  const handleReserveClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!user) {
+      setModalOpen(true);
+    } else {
+      navigate('/book-stage');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-oso-light-gray">
       {/* Hero Section */}
@@ -15,10 +30,39 @@ const HomePage: React.FC = () => {
             <p className="text-xl mb-xl leading-relaxed max-w-3xl mx-auto text-gray-700">
               Stages d'orientation sur-mesure, sans contraintes, pour explorer facilement plusieurs univers professionnels.
             </p>
-            <Link to="/register/student" className="btn-primary text-lg px-8 py-4 shadow-lg">
+            <button
+              onClick={handleReserveClick}
+              className="btn-primary text-lg px-8 py-4 shadow-lg"
+            >
               <span>Je réserve mon stage !</span>
               <ArrowRight className="w-5 h-5" />
-            </Link>
+            </button>
+            <Modal
+              isOpen={modalOpen}
+              onClose={() => setModalOpen(false)}
+              title="Connecte-toi ou crée un compte"
+              actions={
+                <>
+                  <button
+                    className="btn-primary"
+                    onClick={() => { setModalOpen(false); navigate('/login'); }}
+                  >
+                    Se connecter
+                  </button>
+                  <button
+                    className="btn-secondary"
+                    onClick={() => { setModalOpen(false); navigate('/register/student'); }}
+                  >
+                    Créer un compte
+                  </button>
+                </>
+              }
+            >
+              <p className="text-gray-700 text-center">
+                Pour réserver un stage, tu dois être connecté.<br />
+                Merci de te connecter ou de créer un compte pour poursuivre.
+              </p>
+            </Modal>
           </div>
         </div>
       </section>

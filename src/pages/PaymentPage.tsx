@@ -86,6 +86,11 @@ const PaymentPage: React.FC = () => {
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
+          <div className="mb-6">
+            <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-800 text-center text-sm font-medium">
+              ⚠️ Le paiement est factice pour le test, aucune somme ne sera prélevée.
+            </div>
+          </div>
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold mb-4">Paiement sécurisé</h1>
             <p className="text-gray-600">
