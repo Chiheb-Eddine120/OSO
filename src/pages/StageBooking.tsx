@@ -5,6 +5,7 @@ import CityAutocomplete from '../components/CityAutocomplete';
 import { CitySearchResult } from '../types/cities';
 import { useAuth } from '../contexts/AuthContext';
 import { stageService } from '../lib/stages';
+import { supabase } from '../lib/supabase';
 
 interface StageBookingData {
   duration: number;
@@ -93,16 +94,28 @@ const StageBooking: React.FC = () => {
     if (!user) return;
     setLoading(true);
     setError(null);
-    const payload = {
-      student_id: user.id,
-      duration: bookingData.duration,
-      period: bookingData.period,
-      location: bookingData.location,
-      max_distance: bookingData.maxDistance,
-      selected_jobs: bookingData.selectedJobs
-    };
-    console.log('[StageBooking] Tentative d\'insertion du stage avec:', payload);
     try {
+      // 1. Récupérer l'id de la table students lié à l'utilisateur connecté
+      const { data: student, error: studentError } = await supabase
+        .from('students')
+        .select('id')
+        .eq('user_id', user.id)
+        .single();
+      console.log('[StageBooking] Résultat recherche student:', student, studentError);
+      if (studentError || !student) {
+        setError("Impossible de trouver le profil étudiant lié à ce compte.");
+        setLoading(false);
+        return;
+      }
+      const payload = {
+        student_id: student.id,
+        duration: bookingData.duration,
+        period: bookingData.period,
+        location: bookingData.location,
+        max_distance: bookingData.maxDistance,
+        selected_jobs: bookingData.selectedJobs
+      };
+      console.log('[StageBooking] Tentative d\'insertion du stage avec:', payload);
       const stage = await stageService.createStageBooking(payload);
       console.log('[StageBooking] Réponse Supabase:', stage);
       navigate('/payment', { state: { bookingData: { ...bookingData, stageId: stage.id } } });

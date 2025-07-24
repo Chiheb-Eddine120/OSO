@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../components/Modal';
+import { stageService } from '../lib/stages';
 
 const MyOSO: React.FC = () => {
   const { user, signOut, updateUser } = useAuth();
@@ -15,9 +16,39 @@ const MyOSO: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = React.useState(false);
+  const [stages, setStages] = useState<any[]>([]);
+  const [loadingStages, setLoadingStages] = useState(false);
+  const [stagesError, setStagesError] = useState<string | null>(null);
 
   React.useEffect(() => {
     setProfile(user);
+    // Charger les réservations de stage si user connecté
+    const fetchStages = async () => {
+      if (!user) return;
+      setLoadingStages(true);
+      setStagesError(null);
+      try {
+        // Récupérer l'id student
+        const { data: student, error: studentError } = await supabase
+          .from('students')
+          .select('id')
+          .eq('user_id', user.id)
+          .single();
+        if (studentError || !student) {
+          setStagesError("Impossible de trouver le profil étudiant lié à ce compte.");
+          setLoadingStages(false);
+          return;
+        }
+        // Récupérer les stages
+        const stagesList = await stageService.getStudentStages(student.id);
+        setStages(stagesList || []);
+      } catch (e: any) {
+        setStagesError("Erreur lors du chargement des réservations.");
+      } finally {
+        setLoadingStages(false);
+      }
+    };
+    fetchStages();
   }, [user]);
 
   const handleSaveProfile = async () => {
@@ -59,6 +90,27 @@ const MyOSO: React.FC = () => {
     } else {
       navigate('/book-stage');
     }
+  };
+
+  // Traduction des valeurs pour l'affichage
+  const periodLabels: Record<string, string> = {
+    autumn: 'Congés d’automne',
+    winter: 'Vacances d’hiver',
+    spring_break: 'Congé de détente',
+    spring: 'Vacances de printemps',
+    summer_july: 'Vacances d’été juillet',
+    summer_august: 'Vacances d’été août',
+  };
+  const statusLabels: Record<string, string> = {
+    pending: 'En attente',
+    confirmed: 'Confirmé',
+    completed: 'Terminé',
+    cancelled: 'Annulé',
+  };
+  const paymentLabels: Record<string, string> = {
+    pending: 'En attente',
+    paid: 'Payé',
+    failed: 'Échoué',
   };
 
   return (
@@ -221,13 +273,57 @@ const MyOSO: React.FC = () => {
             <div className="space-y-6">
               <div className="card text-center py-12">
                 <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Aucune réservation</h3>
-                <p className="text-gray-600 mb-4">
-                  Vous n'avez pas encore de réservation de stage.
-                </p>
-                <button className="btn-primary" onClick={handleReserveClick}>
-                  Réserver un stage
-                </button>
+                <h3 className="text-lg font-semibold mb-2">Mes réservations de stage</h3>
+                {loadingStages ? (
+                  <div className="text-gray-500">Chargement...</div>
+                ) : stagesError ? (
+                  <div className="text-red-600">{stagesError}</div>
+                ) : stages.length === 0 ? (
+                  <>
+                    <p className="text-gray-600 mb-4">Vous n'avez pas encore de réservation de stage.</p>
+                    <button className="btn-primary" onClick={handleReserveClick}>
+                      Réserver un stage
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full text-left mt-6">
+                        <thead>
+                          <tr>
+                            <th className="px-4 py-2">Période</th>
+                            <th className="px-4 py-2">Ville</th>
+                            <th className="px-4 py-2">Durée</th>
+                            <th className="px-4 py-2">Rayon</th>
+                            <th className="px-4 py-2">Métiers</th>
+                            <th className="px-4 py-2">Statut</th>
+                            <th className="px-4 py-2">Paiement</th>
+                            <th className="px-4 py-2">Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {stages.map((stage) => (
+                            <tr key={stage.id} className="border-t">
+                              <td className="px-4 py-2">{periodLabels[stage.period] || stage.period}</td>
+                              <td className="px-4 py-2">{stage.location}</td>
+                              <td className="px-4 py-2">{stage.duration} j</td>
+                              <td className="px-4 py-2">{stage.max_distance} km</td>
+                              <td className="px-4 py-2">{Array.isArray(stage.selected_jobs) ? stage.selected_jobs.join(', ') : ''}</td>
+                              <td className="px-4 py-2">{statusLabels[stage.status] || stage.status}</td>
+                              <td className="px-4 py-2">{paymentLabels[stage.payment_status] || stage.payment_status}</td>
+                              <td className="px-4 py-2">{stage.created_at ? new Date(stage.created_at).toLocaleDateString() : ''}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <div className="mt-6 flex justify-center">
+                      <button className="btn-primary" onClick={handleReserveClick}>
+                        Réserver à nouveau ?
+                      </button>
+                    </div>
+                  </>
+                )}
                 <Modal
                   isOpen={modalOpen}
                   onClose={() => setModalOpen(false)}

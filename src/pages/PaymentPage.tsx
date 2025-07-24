@@ -53,7 +53,7 @@ const PaymentPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsProcessing(true);
-
+    console.log('[PaymentPage] bookingData reçu:', bookingData);
     try {
       // Simulation d'un appel de paiement
       await new Promise(resolve => setTimeout(resolve, 2000));
@@ -62,6 +62,7 @@ const PaymentPage: React.FC = () => {
       const success = true;
       
       if (success) {
+        console.log('[PaymentPage] Paiement simulé réussi. Redirection vers /success.');
         navigate('/success', { state: { bookingData } });
       } else {
         throw new Error('Paiement échoué');
