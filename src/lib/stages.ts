@@ -1,5 +1,4 @@
 import { supabase } from './supabase'
-import { Stage } from './supabase'
 
 export interface StageBookingData {
   duration: number
