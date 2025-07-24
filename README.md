@@ -2,11 +2,11 @@
 
 ## Description
 
-OSO est une plateforme web moderne développée en React TypeScript qui facilite la mise en relation entre les étudiants et les professionnels pour des stages d'orientation. La plateforme permet aux jeunes de découvrir différents métiers et aux professionnels de partager leur expertise.
+OSO est une plateforme web moderne développée en React TypeScript qui facilite la mise en relation entre les jeunes et les professionnels pour des stages d'orientation. La plateforme permet aux jeunes de découvrir différents métiers et aux professionnels de partager leur expertise.
 
 ## Fonctionnalités principales
 
-### Pour les étudiants
+### Pour les jeunes
 - **Inscription** : Création de profil avec autocomplétion des villes belges
 - **Réservation de stage** : Processus en 4 étapes :
   1. Durée du stage (1-5 jours)
@@ -20,7 +20,7 @@ OSO est une plateforme web moderne développée en React TypeScript qui facilite
 ### Pour les professionnels
 - **Inscription** : Création de profil professionnel détaillé
 - **Gestion des disponibilités** : Calendrier pour indiquer les créneaux disponibles
-- **Mise en relation** : Matching automatique avec les étudiants
+- **Mise en relation** : Matching automatique avec les jeunes
 - **Évaluation** : Retour d'expérience des jeunes stagiaires
 
 ## Technologies utilisées
@@ -54,9 +54,9 @@ src/
 │   ├── Header.tsx      # Navigation principale
 │   └── CityAutocomplete.tsx  # Autocomplétion des villes
 ├── pages/              # Pages de l'application
-│   ├── HomePage.tsx    # Page d'accueil étudiants
+│   ├── HomePage.tsx    # Page d'accueil jeunes
 │   ├── ProHomePage.tsx # Page d'accueil professionnels
-│   ├── StudentRegistration.tsx # Inscription étudiants
+│   ├── StudentRegistration.tsx # Inscription jeunes
 │   ├── ProfessionalRegistration.tsx # Inscription professionnels
 │   ├── StageBooking.tsx # Réservation de stage
 │   ├── PaymentPage.tsx # Page de paiement
@@ -109,7 +109,7 @@ REACT_APP_SUPABASE_ANON_KEY=votre_clé_anon_supabase
 ### Tables nécessaires
 
 1. **users** : Profils utilisateurs
-2. **students** : Informations spécifiques aux étudiants
+2. **students** : Informations spécifiques aux jeunes
 3. **professionals** : Informations spécifiques aux professionnels
 4. **stages** : Réservations de stages
 5. **jobs** : Métiers proposés par les professionnels

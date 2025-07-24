@@ -217,7 +217,7 @@ const ContactPage: React.FC = () => {
               <div className="card">
                 <h3 className="font-semibold mb-2">Comment réserver un stage ?</h3>
                 <p className="text-gray-600 text-sm">
-                  Créez votre compte étudiant, puis suivez le processus de réservation en 4 étapes simples.
+                  Créez votre compte jeune, puis suivez le processus de réservation en 4 étapes simples.
                 </p>
               </div>
               <div className="card">

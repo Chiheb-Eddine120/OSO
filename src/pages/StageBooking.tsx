@@ -103,7 +103,7 @@ const StageBooking: React.FC = () => {
         .single();
       console.log('[StageBooking] Résultat recherche student:', student, studentError);
       if (studentError || !student) {
-        setError("Impossible de trouver le profil étudiant lié à ce compte.");
+        setError("Impossible de trouver le profil jeune lié à ce compte.");
         setLoading(false);
         return;
       }

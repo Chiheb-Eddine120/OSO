@@ -59,7 +59,7 @@ const StudentRegistration: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold mb-4">Inscription Étudiant</h1>
+            <h1 className="text-3xl font-bold mb-4">Inscription jeune</h1>
             <p className="text-gray-600">
               Créez votre profil pour commencer à explorer les métiers qui vous intéressent
             </p>

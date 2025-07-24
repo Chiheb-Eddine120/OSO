@@ -87,7 +87,7 @@ export const stageService = {
     }
   },
 
-  // Récupérer les stages d'un étudiant
+  // Récupérer les stages d'un jeune
   async getStudentStages(studentId: string) {
     try {
       const { data, error } = await supabase

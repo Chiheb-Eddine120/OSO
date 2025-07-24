@@ -35,7 +35,7 @@ const MyOSO: React.FC = () => {
           .eq('user_id', user.id)
           .single();
         if (studentError || !student) {
-          setStagesError("Impossible de trouver le profil étudiant lié à ce compte.");
+          setStagesError("Impossible de trouver le profil jeune lié à ce compte.");
           setLoadingStages(false);
           return;
         }

@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 2. Table des étudiants
+-- 2. Table des jeunes
 CREATE TABLE IF NOT EXISTS students (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES users(id) ON DELETE CASCADE UNIQUE NOT NULL,

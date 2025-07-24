@@ -89,7 +89,7 @@ Toutes les tables ont des politiques RLS activées :
 - ✅ Protection des routes
 
 ### Gestion des données
-- ✅ Création de profils étudiants/professionnels
+- ✅ Création de profils jeunes/professionnels
 - ✅ Réservation de stages
 - ✅ Récupération des métiers disponibles
 - ✅ Gestion des disponibilités
@@ -101,7 +101,7 @@ Toutes les tables ont des politiques RLS activées :
 
 ## 9. Prochaines étapes
 
-1. **Tester l'inscription** d'un étudiant et d'un professionnel
+1. **Tester l'inscription** d'un jeune et d'un professionnel
 2. **Tester la réservation** d'un stage
 3. **Implémenter le système de paiement** réel
 4. **Ajouter les notifications** email/SMS
