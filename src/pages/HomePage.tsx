@@ -51,7 +51,7 @@ const HomePage: React.FC = () => {
                   </button>
                   <button
                     className="btn-secondary"
-                    onClick={() => { setModalOpen(false); navigate('/register/student'); }}
+                    onClick={() => { setModalOpen(false); navigate('/register'); }}
                   >
                     Créer un compte
                   </button>
