@@ -93,17 +93,21 @@ const StageBooking: React.FC = () => {
     if (!user) return;
     setLoading(true);
     setError(null);
+    const payload = {
+      student_id: user.id,
+      duration: bookingData.duration,
+      period: bookingData.period,
+      location: bookingData.location,
+      max_distance: bookingData.maxDistance,
+      selected_jobs: bookingData.selectedJobs
+    };
+    console.log('[StageBooking] Tentative d\'insertion du stage avec:', payload);
     try {
-      const stage = await stageService.createStageBooking({
-        student_id: user.id,
-        duration: bookingData.duration,
-        period: bookingData.period,
-        location: bookingData.location,
-        max_distance: bookingData.maxDistance,
-        selected_jobs: bookingData.selectedJobs
-      });
+      const stage = await stageService.createStageBooking(payload);
+      console.log('[StageBooking] Réponse Supabase:', stage);
       navigate('/payment', { state: { bookingData: { ...bookingData, stageId: stage.id } } });
     } catch (e: any) {
+      console.error('[StageBooking] Erreur lors de la création du stage:', e);
       setError("Erreur lors de l'enregistrement de la réservation. Veuillez réessayer.");
     } finally {
       setLoading(false);
