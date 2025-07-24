@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Calendar, MapPin, Clock, Users, CheckCircle, AlertCircle } from 'lucide-react';
 import CityAutocomplete from '../components/CityAutocomplete';
 import { CitySearchResult } from '../types/cities';
+import { useAuth } from '../contexts/AuthContext';
+import { stageService } from '../lib/stages';
 
 interface StageBookingData {
   duration: number;
@@ -25,6 +27,9 @@ const StageBooking: React.FC = () => {
   });
   const [selectedCity, setSelectedCity] = useState<CitySearchResult | null>(null);
   const [cityValue, setCityValue] = useState('');
+  const { user } = useAuth();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const periods = [
     { id: 'autumn', label: 'Congés d\'automne', dates: 'Octobre/Novembre' },
@@ -84,9 +89,25 @@ const StageBooking: React.FC = () => {
     }));
   };
 
-  const handleConfirm = () => {
-    // Redirection vers la page de paiement
-    navigate('/payment', { state: { bookingData } });
+  const handleConfirm = async () => {
+    if (!user) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const stage = await stageService.createStageBooking({
+        student_id: user.id,
+        duration: bookingData.duration,
+        period: bookingData.period,
+        location: bookingData.location,
+        max_distance: bookingData.maxDistance,
+        selected_jobs: bookingData.selectedJobs
+      });
+      navigate('/payment', { state: { bookingData: { ...bookingData, stageId: stage.id } } });
+    } catch (e: any) {
+      setError("Erreur lors de l'enregistrement de la réservation. Veuillez réessayer.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCitySelect = (city: CitySearchResult) => {
@@ -309,12 +330,13 @@ const StageBooking: React.FC = () => {
                     </div>
                   </div>
                 </div>
+                {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
                 <button
                   onClick={handleConfirm}
-                  disabled={bookingData.selectedJobs.length === 0}
+                  disabled={bookingData.selectedJobs.length === 0 || loading}
                   className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Confirmer ma sélection
+                  {loading ? 'Enregistrement...' : 'Confirmer ma sélection'}
                 </button>
               </div>
             )}
