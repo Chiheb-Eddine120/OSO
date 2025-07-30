@@ -182,7 +182,6 @@ const StageBooking: React.FC = () => {
                     onChange={e => setBookingData(prev => ({ ...prev, duration: Number(e.target.value) }))}
                   >
                     <option value="">Sélectionne une durée</option>
-                    <option value={3}>3 jours</option>
                     <option value={5}>5 jours</option>
                     <option value={10}>10 jours</option>
                   </select>
@@ -197,7 +196,7 @@ const StageBooking: React.FC = () => {
                   Période du stage
                 </h2>
                 <p className="text-gray-600 mb-6">
-                  Choisissez la période qui vous convient le mieux pour votre stage.
+                  Choisis la période qui te convient le mieux pour ton stage.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {periods.map((period) => (
@@ -225,7 +224,7 @@ const StageBooking: React.FC = () => {
                   Localité
                 </h2>
                 <p className="text-gray-600 mb-6">
-                  Indiquez votre ville pour trouver les stages disponibles à proximité.
+                  Indique ta ville pour trouver les stages disponibles à proximité.
                 </p>
                 <div className="form-group">
                   <label className="form-label">Votre ville</label>
@@ -256,7 +255,7 @@ const StageBooking: React.FC = () => {
                   Rayon de recherche
                 </h2>
                 <p className="text-gray-600 mb-6">
-                  Combien de kilomètres êtes-vous prêt à parcourir pour votre stage ?
+                  Combien de kilomètres es-tu prêt.e à parcourir pour ton stage ?
                 </p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {distances.map((distance) => (
@@ -281,10 +280,10 @@ const StageBooking: React.FC = () => {
               <div>
                 <h2 className="text-2xl font-bold mb-6 flex items-center">
                   <Users className="w-6 h-6 mr-2" />
-                  Choisissez vos métiers
+                  Choisissez les métiers que tu souhaites découvrir
                 </h2>
                 <p className="text-gray-600 mb-6">
-                  Sélectionnez les métiers que vous souhaitez découvrir pendant votre stage.
+                  Sélectionne les métiers que tu souhaites découvrir pendant ton stage.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {availableJobs.map((job) => (

@@ -144,7 +144,7 @@ const ProHomePage: React.FC = () => {
         <div className="container">
           <div className="text-center">
             <h2 className="mb-lg">Prêt à rejoindre l'aventure OSO ?</h2>
-            <Link to="/register/professional" className="btn-primary text-lg px-8 py-4">
+            <Link to="/register" className="btn-primary text-lg px-8 py-4">
               <Heart className="w-5 h-5" />
               <span>Je m'inscris comme professionnel</span>
             </Link>

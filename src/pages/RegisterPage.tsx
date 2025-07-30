@@ -51,7 +51,7 @@ const RegisterPage: React.FC = () => {
           <button
             className="w-full bg-pink-600 text-white py-2 rounded-lg font-semibold mb-4 hover:bg-pink-700 transition"
             onClick={() => setUserType('student')}
-          >Je suis jeune</button>
+          >Je suis un futur stagiaire</button>
           <button
             className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
             onClick={() => setUserType('professional')}

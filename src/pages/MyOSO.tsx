@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { User, Calendar, Settings, LogOut, Edit, Eye, EyeOff } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { User, Calendar, Settings, LogOut, Edit, Eye, EyeOff, Clock } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../components/Modal';
 import { stageService } from '../lib/stages';
+import AvailabilityCalendar from '../components/AvailabilityCalendar';
 
 const MyOSO: React.FC = () => {
   const { user, signOut, updateUser } = useAuth();
@@ -19,36 +20,64 @@ const MyOSO: React.FC = () => {
   const [stages, setStages] = useState<any[]>([]);
   const [loadingStages, setLoadingStages] = useState(false);
   const [stagesError, setStagesError] = useState<string | null>(null);
+  const [professionalId, setProfessionalId] = useState<string | null>(null);
+  const [loadingProfessional, setLoadingProfessional] = useState(false);
 
   React.useEffect(() => {
     setProfile(user);
-    // Charger les réservations de stage si user connecté
-    const fetchStages = async () => {
+    
+    const fetchUserData = async () => {
       if (!user) return;
-      setLoadingStages(true);
-      setStagesError(null);
-      try {
-        // Récupérer l'id student
-        const { data: student, error: studentError } = await supabase
-          .from('students')
-          .select('id')
-          .eq('user_id', user.id)
-          .single();
-        if (studentError || !student) {
-          setStagesError("Impossible de trouver le profil jeune lié à ce compte.");
-          setLoadingStages(false);
-          return;
+      
+      // Si c'est un professionnel, récupérer son ID professionnel
+      if (user.user_type === 'professional') {
+        setLoadingProfessional(true);
+        try {
+          const { data: professional, error: professionalError } = await supabase
+            .from('professionals')
+            .select('id')
+            .eq('user_id', user.id)
+            .single();
+          if (professionalError || !professional) {
+            console.error("Impossible de trouver le profil professionnel lié à ce compte.");
+          } else {
+            setProfessionalId(professional.id);
+          }
+        } catch (e: any) {
+          console.error("Erreur lors de la récupération du profil professionnel:", e);
+        } finally {
+          setLoadingProfessional(false);
         }
-        // Récupérer les stages
-        const stagesList = await stageService.getStudentStages(student.id);
-        setStages(stagesList || []);
-      } catch (e: any) {
-        setStagesError("Erreur lors du chargement des réservations.");
-      } finally {
-        setLoadingStages(false);
+      }
+      
+      // Si c'est un étudiant, charger les réservations de stage
+      if (user.user_type === 'student') {
+        setLoadingStages(true);
+        setStagesError(null);
+        try {
+          // Récupérer l'id student
+          const { data: student, error: studentError } = await supabase
+            .from('students')
+            .select('id')
+            .eq('user_id', user.id)
+            .single();
+          if (studentError || !student) {
+            setStagesError("Impossible de trouver le profil jeune lié à ce compte.");
+            setLoadingStages(false);
+            return;
+          }
+          // Récupérer les stages
+          const stagesList = await stageService.getStudentStages(student.id);
+          setStages(stagesList || []);
+        } catch (e: any) {
+          setStagesError("Erreur lors du chargement des réservations.");
+        } finally {
+          setLoadingStages(false);
+        }
       }
     };
-    fetchStages();
+    
+    fetchUserData();
   }, [user]);
 
   const handleSaveProfile = async () => {
@@ -146,8 +175,17 @@ const MyOSO: React.FC = () => {
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
-              <Calendar className="w-4 h-4 inline mr-2" />
-              Mes réservations
+              {user?.user_type === 'professional' ? (
+                <>
+                  <Clock className="w-4 h-4 inline mr-2" />
+                  Mes disponibilités
+                </>
+              ) : (
+                <>
+                  <Calendar className="w-4 h-4 inline mr-2" />
+                  Mes réservations
+                </>
+              )}
             </button>
             <button
               onClick={() => setActiveTab('settings')}
@@ -271,86 +309,106 @@ const MyOSO: React.FC = () => {
           {/* Les autres onglets restent inchangés pour l'instant */}
           {activeTab === 'bookings' && (
             <div className="space-y-6">
-              <div className="card text-center py-12">
-                <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Mes réservations de stage</h3>
-                {loadingStages ? (
-                  <div className="text-gray-500">Chargement...</div>
-                ) : stagesError ? (
-                  <div className="text-red-600">{stagesError}</div>
-                ) : stages.length === 0 ? (
-                  <>
-                    <p className="text-gray-600 mb-4">Vous n'avez pas encore de réservation de stage.</p>
-                    <button className="btn-primary" onClick={handleReserveClick}>
-                      Réserver un stage
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <div className="overflow-x-auto">
-                      <table className="min-w-full text-left mt-6">
-                        <thead>
-                          <tr>
-                            <th className="px-4 py-2">Période</th>
-                            <th className="px-4 py-2">Ville</th>
-                            <th className="px-4 py-2">Durée</th>
-                            <th className="px-4 py-2">Rayon</th>
-                            <th className="px-4 py-2">Métiers</th>
-                            <th className="px-4 py-2">Statut</th>
-                            <th className="px-4 py-2">Paiement</th>
-                            <th className="px-4 py-2">Date</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {stages.map((stage) => (
-                            <tr key={stage.id} className="border-t">
-                              <td className="px-4 py-2">{periodLabels[stage.period] || stage.period}</td>
-                              <td className="px-4 py-2">{stage.location}</td>
-                              <td className="px-4 py-2">{stage.duration} j</td>
-                              <td className="px-4 py-2">{stage.max_distance} km</td>
-                              <td className="px-4 py-2">{Array.isArray(stage.selected_jobs) ? stage.selected_jobs.join(', ') : ''}</td>
-                              <td className="px-4 py-2">{statusLabels[stage.status] || stage.status}</td>
-                              <td className="px-4 py-2">{paymentLabels[stage.payment_status] || stage.payment_status}</td>
-                              <td className="px-4 py-2">{stage.created_at ? new Date(stage.created_at).toLocaleDateString() : ''}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+              {user?.user_type === 'professional' ? (
+                // Interface pour les professionnels - Calendrier des disponibilités
+                <div>
+                  {loadingProfessional ? (
+                    <div className="card text-center py-12">
+                      <div className="text-gray-500">Chargement...</div>
                     </div>
-                    <div className="mt-6 flex justify-center">
-                      <button className="btn-primary" onClick={handleReserveClick}>
-                        Réserver à nouveau ?
-                      </button>
+                  ) : professionalId ? (
+                    <AvailabilityCalendar professionalId={professionalId} />
+                  ) : (
+                    <div className="card text-center py-12">
+                      <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold mb-2">Erreur de chargement</h3>
+                      <p className="text-gray-600">Impossible de charger votre profil professionnel.</p>
                     </div>
-                  </>
-                )}
-                <Modal
-                  isOpen={modalOpen}
-                  onClose={() => setModalOpen(false)}
-                  title="Connecte-toi ou crée un compte"
-                  actions={
+                  )}
+                </div>
+              ) : (
+                // Interface pour les étudiants - Réservations de stage
+                <div className="card text-center py-12">
+                  <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">Mes réservations de stage</h3>
+                  {loadingStages ? (
+                    <div className="text-gray-500">Chargement...</div>
+                  ) : stagesError ? (
+                    <div className="text-red-600">{stagesError}</div>
+                  ) : stages.length === 0 ? (
                     <>
-                      <button
-                        className="btn-primary"
-                        onClick={() => { setModalOpen(false); navigate('/login'); }}
-                      >
-                        Se connecter
-                      </button>
-                      <button
-                        className="btn-secondary"
-                        onClick={() => { setModalOpen(false); navigate('/register/student'); }}
-                      >
-                        Créer un compte
+                      <p className="text-gray-600 mb-4">Vous n'avez pas encore de réservation de stage.</p>
+                      <button className="btn-primary" onClick={handleReserveClick}>
+                        Réserver un stage
                       </button>
                     </>
-                  }
-                >
-                  <p className="text-gray-700 text-center">
-                    Pour réserver un stage, tu dois être connecté.<br />
-                    Merci de te connecter ou de créer un compte pour poursuivre.
-                  </p>
-                </Modal>
-              </div>
+                  ) : (
+                    <>
+                      <div className="overflow-x-auto">
+                        <table className="min-w-full text-left mt-6">
+                          <thead>
+                            <tr>
+                              <th className="px-4 py-2">Période</th>
+                              <th className="px-4 py-2">Ville</th>
+                              <th className="px-4 py-2">Durée</th>
+                              <th className="px-4 py-2">Rayon</th>
+                              <th className="px-4 py-2">Métiers</th>
+                              <th className="px-4 py-2">Statut</th>
+                              <th className="px-4 py-2">Paiement</th>
+                              <th className="px-4 py-2">Date</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {stages.map((stage) => (
+                              <tr key={stage.id} className="border-t">
+                                <td className="px-4 py-2">{periodLabels[stage.period] || stage.period}</td>
+                                <td className="px-4 py-2">{stage.location}</td>
+                                <td className="px-4 py-2">{stage.duration} j</td>
+                                <td className="px-4 py-2">{stage.max_distance} km</td>
+                                <td className="px-4 py-2">{Array.isArray(stage.selected_jobs) ? stage.selected_jobs.join(', ') : ''}</td>
+                                <td className="px-4 py-2">{statusLabels[stage.status] || stage.status}</td>
+                                <td className="px-4 py-2">{paymentLabels[stage.payment_status] || stage.payment_status}</td>
+                                <td className="px-4 py-2">{stage.created_at ? new Date(stage.created_at).toLocaleDateString() : ''}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className="mt-6 flex justify-center">
+                        <button className="btn-primary" onClick={handleReserveClick}>
+                          Réserver à nouveau ?
+                        </button>
+                      </div>
+                    </>
+                  )}
+                  <Modal
+                    isOpen={modalOpen}
+                    onClose={() => setModalOpen(false)}
+                    title="Connecte-toi ou crée un compte"
+                    actions={
+                      <>
+                        <button
+                          className="btn-primary"
+                          onClick={() => { setModalOpen(false); navigate('/login'); }}
+                        >
+                          Se connecter
+                        </button>
+                        <button
+                          className="btn-secondary"
+                          onClick={() => { setModalOpen(false); navigate('/register/student'); }}
+                        >
+                          Créer un compte
+                        </button>
+                      </>
+                    }
+                  >
+                    <p className="text-gray-700 text-center">
+                      Pour réserver un stage, tu dois être connecté.<br />
+                      Merci de te connecter ou de créer un compte pour poursuivre.
+                    </p>
+                  </Modal>
+                </div>
+              )}
             </div>
           )}
 
