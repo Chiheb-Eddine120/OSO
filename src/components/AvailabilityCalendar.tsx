@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Calendar from 'react-calendar';
-import { format, parseISO, isSameDay, addDays, startOfWeek, endOfWeek } from 'date-fns';
+import { format, parseISO, isSameDay } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { Clock, Plus, Trash2, Save, X } from 'lucide-react';
 import { Availability, availabilityService } from '../lib/availabilities';
@@ -26,12 +26,7 @@ const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({ professiona
     { start_time: '14:00', end_time: '17:00' }
   ]);
 
-  // Charger les disponibilités
-  useEffect(() => {
-    loadAvailabilities();
-  }, [professionalId]);
-
-  const loadAvailabilities = async () => {
+  const loadAvailabilities = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -42,7 +37,12 @@ const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({ professiona
     } finally {
       setLoading(false);
     }
-  };
+  }, [professionalId]);
+
+  // Charger les disponibilités
+  useEffect(() => {
+    loadAvailabilities();
+  }, [loadAvailabilities]);
 
   // Vérifier si une date a des disponibilités
   const hasAvailability = (date: Date) => {
