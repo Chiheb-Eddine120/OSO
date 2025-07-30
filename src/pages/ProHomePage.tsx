@@ -15,7 +15,7 @@ const ProHomePage: React.FC = () => {
             <p className="text-xl mb-xl leading-relaxed max-w-3xl mx-auto">
               OSO, c'est la solution qui manquait pour explorer l'avenir professionnel des jeunes.
             </p>
-            <Link to="/register/professional" className="btn-primary text-lg px-8 py-4">
+            <Link to="/register" className="btn-primary text-lg px-8 py-4">
               <span>Je rejoins le réseau de professionnels chez OSO</span>
               <Heart className="w-5 h-5" />
             </Link>
