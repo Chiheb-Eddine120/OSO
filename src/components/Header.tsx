@@ -8,7 +8,6 @@ import logoCouleur from '../assets/logos/LogoCouleur700x140.png';
 const Header: React.FC = () => {
   const { user } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [logoLoaded, setLogoLoaded] = useState(true);
   const [logoError, setLogoError] = useState(false);
   const location = useLocation();
 
@@ -23,7 +22,6 @@ const Header: React.FC = () => {
   // Réinitialiser l'erreur de logo quand on change de page ou de scroll
   useEffect(() => {
     setLogoError(false);
-    setLogoLoaded(true);
   }, [location.pathname, isScrolled]);
 
   const getCTAText = () => {
@@ -51,10 +49,8 @@ const Header: React.FC = () => {
               alt="OSO Logo" 
               className="h-10 w-auto drop-shadow transition-all duration-300 hover:scale-105" 
               style={{ maxHeight: '40px' }}
-              onLoad={() => setLogoLoaded(true)}
               onError={() => {
                 setLogoError(true);
-                setLogoLoaded(false);
               }}
             />
           ) : (

@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/static/css/main.4ad86eee.css",
+    "main.js": "/static/js/main.cdbe6a2d.js",
+    "static/media/Montserrat-Arabic SemiBold 600.otf": "/static/media/Montserrat-Arabic SemiBold 600.f65b77b9e92b6112b9c8.otf",
+    "static/media/Montserrat-Arabic ExtraBold 800.otf": "/static/media/Montserrat-Arabic ExtraBold 800.56213691ef07af88d1fe.otf",
+    "static/media/Montserrat-Arabic Bold 700.otf": "/static/media/Montserrat-Arabic Bold 700.dab1c3f78a9b71acde63.otf",
+    "static/media/Montserrat-Arabic Medium 500.otf": "/static/media/Montserrat-Arabic Medium 500.976fc5439dcf664a7b7b.otf",
+    "static/media/Montserrat-Arabic Black 900.otf": "/static/media/Montserrat-Arabic Black 900.d93621b61c5c438d6019.otf",
+    "static/media/Montserrat-Arabic Regular 400.otf": "/static/media/Montserrat-Arabic Regular 400.851c241b4d7c04079e14.otf",
+    "static/media/Montserrat-Arabic Light 300.otf": "/static/media/Montserrat-Arabic Light 300.a692e62e4ae95853e3ac.otf",
+    "static/media/Montserrat-Arabic ExtraLight 275.otf": "/static/media/Montserrat-Arabic ExtraLight 275.cc0c2e7341a625e63f88.otf",
+    "static/media/Montserrat-Arabic Thin 250.otf": "/static/media/Montserrat-Arabic Thin 250.a3401a2481d695f8c65e.otf",
+    "static/media/LogoCouleur700x140.png": "/static/media/LogoCouleur700x140.8d8ae0df5563ca6f2153.png",
+    "static/media/LogoBlanc350x70.png": "/static/media/LogoBlanc350x70.296fb22aba09aa0fe23e.png",
+    "index.html": "/index.html",
+    "main.4ad86eee.css.map": "/static/css/main.4ad86eee.css.map",
+    "main.cdbe6a2d.js.map": "/static/js/main.cdbe6a2d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4ad86eee.css",
+    "static/js/main.cdbe6a2d.js"
+  ]
+}

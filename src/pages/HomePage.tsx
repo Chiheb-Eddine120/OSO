@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Users, Award, MessageCircle, Target, Heart, Stethoscope, Code, GraduationCap, Factory, Scale } from 'lucide-react';
+import { ArrowRight, MessageCircle, Stethoscope, Code, GraduationCap, Factory, Scale } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import Modal from '../components/Modal';
 
