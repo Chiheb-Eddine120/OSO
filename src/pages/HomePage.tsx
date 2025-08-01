@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Users, Award, MessageCircle, Target, Heart } from 'lucide-react';
+import { ArrowRight, Users, Award, MessageCircle, Target, Heart, Stethoscope, Code, GraduationCap, Factory, Scale } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import Modal from '../components/Modal';
 
@@ -21,6 +21,9 @@ const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-oso-light-gray">
       {/* Hero Section */}
+      <div className="flex justify-center mb-8">
+        <img src="../assets/logos/LogoCouleur700x140.png" alt="Logo OSO" className="h-20" />
+      </div>
       <section className="section-hero py-16 md:py-24">
         <div className="container">
           <div className="max-w-5xl mx-auto text-center">
@@ -122,28 +125,36 @@ const HomePage: React.FC = () => {
           <div className="cards-container flex flex-wrap gap-6 justify-center">
             <div className="card card-feature p-8">
               <div className="w-12 h-12 bg-gradient-to-br from-oso-pink to-oso-orange rounded-full flex items-center justify-center mx-auto mb-md">
-                <Users className="w-6 h-6 text-white" />
+                <Stethoscope className="w-6 h-6 text-white" />
               </div>
-              <div className="font-semibold">Expertise</div>
+              <div className="font-semibold">Santé</div>
             </div>
             <div className="card card-feature p-8">
               <div className="w-12 h-12 bg-gradient-to-br from-oso-pink to-oso-orange rounded-full flex items-center justify-center mx-auto mb-md">
-                <Award className="w-6 h-6 text-white" />
+                <Code className="w-6 h-6 text-white" />
               </div>
-              <div className="font-semibold">Reconnaissance</div>
+              <div className="font-semibold">Technologie</div>
             </div>
             <div className="card card-feature p-8">
               <div className="w-12 h-12 bg-gradient-to-br from-oso-pink to-oso-orange rounded-full flex items-center justify-center mx-auto mb-md">
-                <Target className="w-6 h-6 text-white" />
+                <GraduationCap className="w-6 h-6 text-white" />
               </div>
-              <div className="font-semibold">Impact</div>
+              <div className="font-semibold">Éducation</div>
             </div>
             <div className="card card-feature p-8">
               <div className="w-12 h-12 bg-gradient-to-br from-oso-pink to-oso-orange rounded-full flex items-center justify-center mx-auto mb-md">
-                <Heart className="w-6 h-6 text-white" />
+                <Factory className="w-6 h-6 text-white" />
               </div>
-              <div className="font-semibold">Échange</div>
+              <div className="font-semibold">Industrie</div>
             </div>
+            <div className="card card-feature p-8">
+              <div className="w-12 h-12 bg-gradient-to-br from-oso-pink to-oso-orange rounded-full flex items-center justify-center mx-auto mb-md">
+                <Scale className="w-6 h-6 text-white" />
+              </div>
+              <div className="font-semibold">Juridique</div>
+            </div>
+
+            <p className="text-center mt-xl">et bien d'autres...</p>
           </div>
           <div className="text-center mt-xl">
             <Link to="/pro" className="btn-secondary">

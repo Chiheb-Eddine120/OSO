@@ -15,6 +15,8 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import FontDemo from './components/FontDemo';
 import LogoTest from './components/LogoTest';
+import LogoFallbackTest from './components/LogoFallbackTest';
+import IconTest from './components/IconTest';
 import './styles/globals.css';
 
 function App() {
@@ -38,6 +40,8 @@ function App() {
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/test-fonts" element={<FontDemo />} />
               <Route path="/test-logo" element={<LogoTest />} />
+              <Route path="/test-logo-fallback" element={<LogoFallbackTest />} />
+              <Route path="/test-icons" element={<IconTest />} />
             </Routes>
           </main>
         </div>

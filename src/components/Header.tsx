@@ -8,6 +8,8 @@ import logoCouleur from '../assets/logos/LogoCouleur700x140.png';
 const Header: React.FC = () => {
   const { user } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [logoLoaded, setLogoLoaded] = useState(true);
+  const [logoError, setLogoError] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -17,6 +19,12 @@ const Header: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Réinitialiser l'erreur de logo quand on change de page ou de scroll
+  useEffect(() => {
+    setLogoError(false);
+    setLogoLoaded(true);
+  }, [location.pathname, isScrolled]);
 
   const getCTAText = () => {
     if (location.pathname.includes('/pro')) {
@@ -37,13 +45,21 @@ const Header: React.FC = () => {
       <div className="header-content flex flex-wrap items-center justify-between py-2 px-4 md:px-8">
         {/* Logo */}
         <Link to="/" className={`header-logo flex items-center gap-2 text-2xl font-extrabold tracking-tight ${isScrolled ? 'scrolled' : ''}`} aria-label="Accueil OSO">
-          <img 
-            src={isScrolled ? logoCouleur : logoBlanc} 
-            alt="OSO Logo" 
-            className="h-10 w-auto drop-shadow transition-all duration-300 hover:scale-105" 
-            style={{ maxHeight: '40px' }}
-          />
-          <span className="gradient-text hidden sm:inline">OSO</span>
+          {!logoError ? (
+            <img 
+              src={isScrolled ? logoCouleur : logoBlanc} 
+              alt="OSO Logo" 
+              className="h-10 w-auto drop-shadow transition-all duration-300 hover:scale-105" 
+              style={{ maxHeight: '40px' }}
+              onLoad={() => setLogoLoaded(true)}
+              onError={() => {
+                setLogoError(true);
+                setLogoLoaded(false);
+              }}
+            />
+          ) : (
+            <span className="gradient-text text-2xl font-extrabold tracking-tight">OSO</span>
+          )}
         </Link>
         {/* Bouton d'action central */}
         <Link 

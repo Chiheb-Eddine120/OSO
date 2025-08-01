@@ -6,18 +6,21 @@ const ProHomePage: React.FC = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
+      <div className="flex justify-center mb-8">
+        <img src="../assets/logos/LogoCouleur700x140.png" alt="Logo OSO" className="h-20" />
+      </div>
       <section className="section-hero">
         <div className="container">
           <div className="max-w-5xl mx-auto text-center">
             <h1 className="gradient-text mb-lg">
-              OSO, notre mission
+            OSO, la solution pour l’orientation des  jeunes en Belgique
             </h1>
             <p className="text-xl mb-xl leading-relaxed max-w-3xl mx-auto">
-              OSO, c'est la solution qui manquait pour explorer l'avenir professionnel des jeunes.
+            OSO, c’est la solution qui manquait aux jeunes pour explorer leur avenir professionnel ! 
             </p>
             <Link to="/register" className="btn-primary text-lg px-8 py-4">
               <span>Je rejoins le réseau de professionnels chez OSO</span>
-              <Heart className="w-5 h-5" />
+              
             </Link>
           </div>
         </div>
@@ -26,18 +29,15 @@ const ProHomePage: React.FC = () => {
       {/* Pourquoi OSO Section */}
       <section className="section">
         <div className="container">
-          <h2 className="text-center mb-2xl">Pourquoi OSO ?</h2>
+          <h2 className="text-center mb-2xl">Notre mission, ensemble </h2>
           <div className="max-w-4xl mx-auto">
             <div className="card">
               <div className="space-y-lg text-lg leading-relaxed">
                 <p>
-                  Aujourd'hui, en Belgique, trop de jeunes sortent des secondaires sans idée claire de leur futur, 
-                  faute d'opportunités concrètes pour découvrir les métiers sur le terrain, les empêchant de faire 
-                  des choix éclairés.
+                Aujourd’hui, en Belgique, trop de jeunes sortent des secondaires sans idée claire de leur futur, faute d’opportunités concrètes pour découvrir les métiers sur le terrain, les empêchant de faire des choix éclairés.
                 </p>
                 <p>
-                  OSO leur propose des stages d'orientation courts, flexibles et concrets, pour explorer facilement 
-                  plusieurs univers professionnels, sans contraintes administratives lourdes.
+                Grâce à vous, partenaires professionnels, OSO leur propose des stages d’observation sur-mesure pour explorer facilement plusieurs univers professionnels, sans contraintes administratives lourdes.
                 </p>
               </div>
             </div>
@@ -48,19 +48,19 @@ const ProHomePage: React.FC = () => {
       {/* Mission Section */}
       <section className="section">
         <div className="container">
-          <h2 className="text-center mb-2xl">Notre mission chez OSO</h2>
+          <h2 className="text-center mb-2xl">Ensemble, faisons la différence </h2>
           <div className="cards-container">
             <div className="card card-feature">
               <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-md">
                 <Heart className="w-6 h-6 text-white" />
               </div>
-              <div className="font-semibold">Votre impact</div>
+              <div className="font-semibold">Votre impact en tant que professionnel</div>
             </div>
             <div className="card card-feature">
               <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-md">
                 <Users className="w-6 h-6 text-white" />
               </div>
-              <div className="font-semibold">Mise en relation</div>
+              <div className="font-semibold">Mise en relation de qualité</div>
             </div>
           </div>
         </div>
@@ -144,8 +144,7 @@ const ProHomePage: React.FC = () => {
         <div className="container">
           <div className="text-center">
             <h2 className="mb-lg">Prêt à rejoindre l'aventure OSO ?</h2>
-            <Link to="/register" className="btn-primary text-lg px-8 py-4">
-              <Heart className="w-5 h-5" />
+            <Link to="/register" className="btn-primary text-lg px-8 py-4">              
               <span>Je m'inscris comme professionnel</span>
             </Link>
           </div>
