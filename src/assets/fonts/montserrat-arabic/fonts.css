@@ -1,0 +1,124 @@
+/* Montserrat Arabic Font Family */
+/* Source: https://www.fontmirror.com/montserrat-arabic */
+
+@font-face {
+  font-family: 'Montserrat Arabic';
+  src: url('./Montserrat-Arabic Thin 250.otf') format('opentype');
+  font-weight: 250;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat Arabic';
+  src: url('./Montserrat-Arabic ExtraLight 275.otf') format('opentype');
+  font-weight: 275;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat Arabic';
+  src: url('./Montserrat-Arabic Light 300.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat Arabic';
+  src: url('./Montserrat-Arabic Regular 400.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat Arabic';
+  src: url('./Montserrat-Arabic Medium 500.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat Arabic';
+  src: url('./Montserrat-Arabic SemiBold 600.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat Arabic';
+  src: url('./Montserrat-Arabic Bold 700.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat Arabic';
+  src: url('./Montserrat-Arabic ExtraBold 800.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat Arabic';
+  src: url('./Montserrat-Arabic Black 900.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Classes utilitaires pour utiliser facilement les polices */
+.font-montserrat-arabic {
+  font-family: 'Montserrat Arabic', sans-serif;
+}
+
+.font-montserrat-arabic-thin {
+  font-family: 'Montserrat Arabic', sans-serif;
+  font-weight: 250;
+}
+
+.font-montserrat-arabic-extralight {
+  font-family: 'Montserrat Arabic', sans-serif;
+  font-weight: 275;
+}
+
+.font-montserrat-arabic-light {
+  font-family: 'Montserrat Arabic', sans-serif;
+  font-weight: 300;
+}
+
+.font-montserrat-arabic-regular {
+  font-family: 'Montserrat Arabic', sans-serif;
+  font-weight: 400;
+}
+
+.font-montserrat-arabic-medium {
+  font-family: 'Montserrat Arabic', sans-serif;
+  font-weight: 500;
+}
+
+.font-montserrat-arabic-semibold {
+  font-family: 'Montserrat Arabic', sans-serif;
+  font-weight: 600;
+}
+
+.font-montserrat-arabic-bold {
+  font-family: 'Montserrat Arabic', sans-serif;
+  font-weight: 700;
+}
+
+.font-montserrat-arabic-extrabold {
+  font-family: 'Montserrat Arabic', sans-serif;
+  font-weight: 800;
+}
+
+.font-montserrat-arabic-black {
+  font-family: 'Montserrat Arabic', sans-serif;
+  font-weight: 900;
+} 

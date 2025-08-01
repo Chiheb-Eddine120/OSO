@@ -2,7 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import des polices Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* Import des polices Montserrat Arabic locales */
+@import url('../assets/fonts/montserrat-arabic/fonts.css');
 
 :root {
   /* Couleurs OSO modernisées */
@@ -23,6 +27,7 @@
   
   /* Typography moderne */
   --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-arabic: 'Montserrat Arabic', sans-serif;
   
   /* Spacing moderne */
   --spacing-xs: 0.25rem;
@@ -63,7 +68,7 @@ html {
 }
 
 body {
-  font-family: var(--font-primary);
+  font-family: var(--font-arabic);
   line-height: 1.6;
   color: var(--oso-black);
   background-color: var(--oso-white);
@@ -399,7 +404,7 @@ p {
   padding: var(--spacing-md);
   border: 2px solid var(--oso-light-gray);
   border-radius: var(--radius-lg);
-  font-family: var(--font-primary);
+  font-family: var(--font-arabic);
   font-size: 1rem;
   transition: all var(--transition-fast);
   background: var(--oso-white);
@@ -618,7 +623,7 @@ p {
   max-width: 100%;
   background: white;
   border: none;
-  font-family: var(--font-primary);
+  font-family: var(--font-arabic);
   line-height: 1.125em;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);

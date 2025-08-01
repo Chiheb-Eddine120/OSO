@@ -17,7 +17,10 @@ module.exports = {
         'oso-dark-gray': '#374151',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['Montserrat Arabic', 'Inter', 'sans-serif'],
+        'montserrat-arabic': ['Montserrat Arabic', 'sans-serif'],
+        'arabic': ['Montserrat Arabic', 'sans-serif'],
+        'inter': ['Inter', 'sans-serif'],
       },
     },
   },
