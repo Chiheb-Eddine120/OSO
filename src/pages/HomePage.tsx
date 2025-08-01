@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, MessageCircle, Stethoscope, Code, GraduationCap, Factory, Scale } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import Modal from '../components/Modal';
+import logoCouleur from '../assets/logos/LogoCouleur700x140.png';
 
 const HomePage: React.FC = () => {
   const { user } = useAuth();
@@ -21,12 +22,13 @@ const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-oso-light-gray">
       {/* Hero Section */}
-      <div className="flex justify-center mb-8">
-        <img src="../assets/logos/LogoCouleur700x140.png" alt="Logo OSO" className="h-20" />
-      </div>
+
       <section className="section-hero py-16 md:py-24">
         <div className="container">
-          <div className="max-w-5xl mx-auto text-center">
+            <div className="max-w-5xl mx-auto text-center">
+              <div className="flex justify-center mb-8">
+          <img src={logoCouleur} alt="Logo OSO" className="h-20" />
+        </div>
             <h1 className="gradient-text mb-lg text-4xl md:text-5xl font-extrabold leading-tight">
               OSO, la solution qui manquait pour explorer ton avenir
             </h1>

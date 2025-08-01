@@ -1,17 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, Users, Star, Award, Target, Sparkles } from 'lucide-react';
+import logoCouleur from '../assets/logos/LogoCouleur700x140.png';
 
 const ProHomePage: React.FC = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <div className="flex justify-center mb-8">
-        <img src="../assets/logos/LogoCouleur700x140.png" alt="Logo OSO" className="h-20" />
-      </div>
+
       <section className="section-hero">
         <div className="container">
           <div className="max-w-5xl mx-auto text-center">
+            <div className="flex justify-center mb-8">
+            <img src={logoCouleur} alt="Logo OSO" className="h-20" />
+          </div>
             <h1 className="gradient-text mb-lg">
             OSO, la solution pour l’orientation des  jeunes en Belgique
             </h1>
