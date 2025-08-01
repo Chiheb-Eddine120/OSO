@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { User, ArrowRight } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import logo from '../assets/logos/logo.png';
+import logoBlanc from '../assets/logos/LogoBlanc350x70.png';
+import logoCouleur from '../assets/logos/LogoCouleur700x140.png';
 
 const Header: React.FC = () => {
   const { user } = useAuth();
@@ -36,7 +37,12 @@ const Header: React.FC = () => {
       <div className="header-content flex flex-wrap items-center justify-between py-2 px-4 md:px-8">
         {/* Logo */}
         <Link to="/" className={`header-logo flex items-center gap-2 text-2xl font-extrabold tracking-tight ${isScrolled ? 'scrolled' : ''}`} aria-label="Accueil OSO">
-          <img src={logo} alt="OSO Logo" className="h-10 w-auto drop-shadow" />
+          <img 
+            src={isScrolled ? logoCouleur : logoBlanc} 
+            alt="OSO Logo" 
+            className="h-10 w-auto drop-shadow transition-all duration-300 hover:scale-105" 
+            style={{ maxHeight: '40px' }}
+          />
           <span className="gradient-text hidden sm:inline">OSO</span>
         </Link>
         {/* Bouton d'action central */}
